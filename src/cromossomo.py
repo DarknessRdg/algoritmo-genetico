@@ -45,8 +45,3 @@ class Cromossomo:
 
     def __repr__(self):
         return self.__str__()
-
-
-if __name__ == '__main__':
-    a = Cromossomo(1, 2, 3, 4, 5)
-    b = Cromossomo(1, 6, 7, 8, 9)
