@@ -1,8 +1,7 @@
-from typing import List
+from dataclasses import dataclass
+from typing import List, Any
 
-
-def fitness_strategy(genes):
-    return 1
+from src import settings
 
 
 class Cromossomo:
@@ -10,7 +9,7 @@ class Cromossomo:
         self.geracao = geracao
         self.genes = genes
 
-        self.fitness = fitness_strategy(self.genes)
+        self.fitness = settings.FITNESS_STRATEGY.calcular(self.genes)
 
     def cross_over(self,
                    outro: 'Cromossomo',
@@ -45,3 +44,8 @@ class Cromossomo:
 
     def __repr__(self):
         return self.__str__()
+
+
+@dataclass
+class Gene:
+    alelo: Any
