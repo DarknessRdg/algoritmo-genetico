@@ -5,7 +5,7 @@ from typing import Any, List
 
 @dataclass
 class ElementoRoleta:
-    id: Any
+    elemento: Any
     probablidade: int  # probablidade de escolha do elemento
     # variando entre 0 - 100
 
@@ -31,7 +31,7 @@ class Roleta:
 
             self.remover_elemento(aleatorio)
 
-            yield aleatorio
+            yield aleatorio.elemento
 
     def get_probabilidades(self):
         return [

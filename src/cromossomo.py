@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from typing import List, Any
 
-from src import settings
+from src import estrategias
+
+
+FITNESS_STRATEGY = estrategias.FitnessStrategy()
 
 
 class Cromossomo:
@@ -9,7 +12,7 @@ class Cromossomo:
         self.geracao = geracao
         self.genes = genes
 
-        self.fitness = settings.FITNESS_STRATEGY.calcular(self.genes)
+        self.fitness = FITNESS_STRATEGY.calcular(self.genes)
 
     def cross_over(self,
                    outro: 'Cromossomo',
@@ -18,17 +21,7 @@ class Cromossomo:
         proxima_geracao = self.geracao + 1
 
         return [
-            Cromossomo(
-                proxima_geracao,
-                *outro.primeiros_genes(quantidade_pontos),
-                *self.ultimos_genes(quantidade_pontos)
-            ),
 
-            Cromossomo(
-                proxima_geracao,
-                *self.primeiros_genes(quantidade_pontos),
-                *outro.ultimos_genes(quantidade_pontos)
-            ),
 
         ]
 

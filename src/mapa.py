@@ -4,7 +4,7 @@ from typing import List, Any
 
 @dataclass
 class Aresta:
-    no_destino: Any
+    no_destino: 'No'
     peso: int
 
 
@@ -38,14 +38,18 @@ class Mapa:
     def __init__(self):
         self.cidades: List[No] = []
 
+    @property
+    def tamanho(self):
+        return len(self.cidades)
+
     def add_aresta(self, de: str, para: str, peso: int):
-        no_de = self._get_no(de)
-        no_para = self._get_no(para)
+        no_de = self.get_cidade(de)
+        no_para = self.get_cidade(para)
 
         no_de.add_adjacente(no_para, peso)
         no_para.add_adjacente(no_de, peso)
 
-    def _get_no(self, id_no) -> No:
+    def get_cidade(self, id_no) -> No:
         no = No(id_no)
 
         try:
