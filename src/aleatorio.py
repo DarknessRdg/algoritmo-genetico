@@ -33,6 +33,9 @@ class Roleta:
 
             yield aleatorio.elemento
 
+    def pop(self):
+        return next(self.selecionar(1))
+
     def get_probabilidades(self):
         return [
             elemento.probablidade

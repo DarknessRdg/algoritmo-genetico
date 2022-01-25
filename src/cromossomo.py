@@ -1,10 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Any
-
-from src import estrategias
-
-
-FITNESS_STRATEGY = estrategias.FitnessStrategy()
+from typing import Any
 
 
 class Cromossomo:
@@ -12,18 +7,7 @@ class Cromossomo:
         self.geracao = geracao
         self.genes = genes
 
-        self.fitness = FITNESS_STRATEGY.calcular(self.genes)
-
-    def cross_over(self,
-                   outro: 'Cromossomo',
-                   quantidade_pontos: int = 1) -> List['Cromossomo']:
-
-        proxima_geracao = self.geracao + 1
-
-        return [
-
-
-        ]
+        self.fitness = None
 
     def primeiros_genes(self, n):
         return self.genes[:n]
@@ -42,3 +26,11 @@ class Cromossomo:
 @dataclass
 class Gene:
     alelo: Any
+
+    def __repr__(self):
+        alelo = 'EMPTY' if not self.alelo else f'Aresta(destino={self.alelo.no_destino.id}, peso={self.alelo.peso})'
+
+        return f'Gene(alelo={alelo})'
+
+    def __bool__(self):
+        return bool(self.alelo)

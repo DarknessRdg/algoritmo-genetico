@@ -1,18 +1,9 @@
 from dataclasses import dataclass
 from typing import List
 
-from src.aleatorio import Roleta, ElementoRoleta
-from src.cromossomo import Cromossomo, Gene
+from src.cromossomo import Gene
+from src.estrategias.shared import criar_cromossomo, criar_roleta_equilibrada
 from src.mapa import Aresta
-
-
-def criar_roleta_equilibrada(conjunto) -> Roleta:
-    elemetos_roleta = (
-        ElementoRoleta(elemento=elemento, probablidade=1)
-        for elemento in conjunto
-    )
-
-    return Roleta(*elemetos_roleta)
 
 
 @dataclass
@@ -28,15 +19,12 @@ class PopulacaoInicialStrategy:
         self.tamanho_cromossos = tamanho_cromossos
 
     def criar(self, tamanho_populacao):
+        geracao = 1
 
         return [
-            self.criar_cromossomo()
+            criar_cromossomo(geracao, *self.criar_genes())
             for _ in range(tamanho_populacao)
         ]
-
-    def criar_cromossomo(self) -> Cromossomo:
-        geracao = 1
-        return Cromossomo(geracao, *self.criar_genes())
 
     def criar_genes(self) -> List[Gene]:
         visitados = []
