@@ -53,3 +53,31 @@ class PopulacaoInicialStrategy:
             genes.append(Gene(alelo=Empty()))
 
         return genes
+
+
+class ControlePopulacionalStrategy:
+    # quantidade de gerações 1 cromossomo com cancer pode
+    # permacer na população
+    geracoes_de_vida_cancer = 2
+
+    def controlar_populacao(self, populacao, quantidade_maxima, geracao):
+        populacao = self.remover_cancerigenos(populacao, geracao)
+        return self.controle_quantidade_populacao(populacao, quantidade_maxima)
+
+    def controle_quantidade_populacao(self, populacao, quantidade_maxima):
+        return populacao[:quantidade_maxima]
+
+    def remover_cancerigenos(self, populacao, geracao):
+        return [
+            cromossomo for cromossomo in populacao
+            if not (
+                cromossomo.cancerigeno
+                and geracao - self.geracoes_de_vida_cancer == cromossomo.geracao
+            )
+        ]
+
+    def remover_todos_cancerigenos(self, populacao):
+        return [
+            cromossomo for cromossomo in populacao
+            if not cromossomo.cancerigeno
+        ]

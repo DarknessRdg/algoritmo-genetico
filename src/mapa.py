@@ -7,6 +7,9 @@ class Aresta:
     no_destino: 'No'
     peso: int
 
+    def __hash__(self):
+        return hash(self.no_destino)
+
 
 class No:
     def __init__(self, identificador: str):

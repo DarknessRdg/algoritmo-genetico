@@ -1,7 +1,11 @@
 from typing import List
 
 from src.cromossomo import Cromossomo
-from src.estrategias.shared import criar_cromossomo, criar_roleta_equilibrada
+from src.estrategias.populacao import Empty
+from src.estrategias.shared import (
+    criar_cromossomo, criar_roleta_equilibrada,
+    completar_genes,
+)
 from src.mapa import No
 
 
@@ -10,6 +14,9 @@ def somente_genes_preenchidos(genes):
 
 
 def get_no(gene):
+    if not gene:
+        return gene
+
     return gene.alelo.no_destino
 
 
@@ -26,11 +33,14 @@ class CrossOverStrategy:
         roleta = criar_roleta_equilibrada(mesmas_cidades)
         cidade_sorteada = roleta.pop()
 
-        return criar_cromossomo(
-            geracao,
+        genes = [
             *self.genes_ate_cidade(cidade_sorteada, pai),
             *self.genes_apos_a_cidade(cidade_sorteada, mae)
-        )
+        ]
+
+        completar_genes(genes, Empty(), len(pai.genes))
+
+        return criar_cromossomo(geracao, *genes)
 
     def genes_ate_cidade(
         self, cidade: No, pai: Cromossomo
@@ -40,6 +50,9 @@ class CrossOverStrategy:
 
         for gene in pai.genes:
             genes.append(gene)
+
+            if len(genes) == len(pai.genes):
+                break
 
             if get_no(gene) == cidade:
                 break
@@ -52,12 +65,15 @@ class CrossOverStrategy:
         genes = []
 
         passou_da_cidade = False
-        for gene in somente_genes_preenchidos(pai.genes):
+        for gene in pai.genes:
             if passou_da_cidade:
                 genes.append(gene)
 
             if cidade == get_no(gene):
                 passou_da_cidade = True
+
+            if len(genes) == len(pai.genes):
+                break
 
         return genes
 
