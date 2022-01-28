@@ -4,6 +4,11 @@ from typing import List, Any
 
 @dataclass
 class Aresta:
+    """
+    Estrutura de dados para salvar uma aresta de 1 no.
+    - no_destino: No que representa a direçaão do destino
+    - peso: Int distancia da aresta.
+    """
     no_destino: 'No'
     peso: int
 
@@ -12,15 +17,22 @@ class Aresta:
 
 
 class No:
+    """
+    Nó com a lista de arestas possíveis para caminhar no mapa.
+    """
     def __init__(self, identificador: str):
         self.id = identificador
         self.arestas: List[Aresta] = []
 
     @property
     def adjacentes(self):
+        """
+        Retorna as cidades adjacentes ao no
+        """
         return [aresta.no_destino for aresta in self.arestas]
 
     def add_adjacente(self, destino, peso: int):
+        """Adiciona uma cidade adjacente ao nó, com seu peso"""
         self.arestas.append(Aresta(no_destino=destino, peso=peso))
 
     def __repr__(self):
@@ -38,7 +50,11 @@ class No:
 
 
 class Mapa:
+    """
+    Grafo que representa o mapa da cidade
+    """
     def __init__(self):
+        # lista de nós cidades presentes no mapa
         self.cidades: List[No] = []
 
     @property
@@ -46,6 +62,7 @@ class Mapa:
         return len(self.cidades)
 
     def add_aresta(self, de: str, para: str, peso: int):
+        """Adiciona uma nova aresta bi-direcional no mapa"""
         no_de = self.get_cidade(de)
         no_para = self.get_cidade(para)
 
@@ -66,6 +83,7 @@ class Mapa:
 
 CIDADES = Mapa()
 
+# Construção do mapa com as cidades e pesos
 CIDADES.add_aresta('A', 'F', 3)
 CIDADES.add_aresta('A', 'G', 4)
 CIDADES.add_aresta('A', 'E', 6)
@@ -78,7 +96,3 @@ CIDADES.add_aresta('C', 'H', 9)
 CIDADES.add_aresta('H', 'K', 3)
 CIDADES.add_aresta('J', 'K', 4)
 CIDADES.add_aresta('J', 'B', 7)
-
-
-for i in CIDADES.cidades:
-    print(i)
