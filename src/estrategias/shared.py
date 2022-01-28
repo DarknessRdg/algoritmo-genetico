@@ -30,5 +30,8 @@ def criar_roleta_equilibrada(conjunto) -> Roleta:
 
 
 def completar_genes(genes, alelo, quantidade):
+    """
+    Função auxiliar para completar os genes com uma quantidade informada.
+    """
     while len(genes) < quantidade:
         genes.append(Gene(alelo=alelo))
