@@ -8,17 +8,36 @@ from src.mapa import Aresta
 
 @dataclass
 class Empty:
+    """
+    Classe vazia utilizada na criação dos Genes para indicar que o gene
+    está vazio e está presente apenas para completar os espaços necessários
+    para o tamanho dos genes.
+    """
+
     def __bool__(self):
         return False
 
 
 class PopulacaoInicialStrategy:
+    """
+    Estratégia para criar a população inicial
+
+    inicio: No - cidade ponto de partida
+    tamanho_cromossomos: Int - tamnaho padrão dos cromossomos gerados.
+    """
 
     def __init__(self, inicio, tamanho_cromossos):
         self.inicio = inicio
         self.tamanho_cromossos = tamanho_cromossos
 
-    def criar(self, tamanho_populacao):
+    def criar(self, tamanho_populacao: int):
+        """
+        Cria uma lista de cromossos que será a população inicial.
+
+        :param tamanho_populacao: Int quantidade de cromossomos presente
+            na população inicial.
+        :return: List[Cromossomo]
+        """
         geracao = 1
 
         return [
@@ -27,28 +46,46 @@ class PopulacaoInicialStrategy:
         ]
 
     def criar_genes(self) -> List[Gene]:
+        """
+        Cria uma lista de genes
+        """
         visitados = []
 
         aresta = Aresta(no_destino=self.inicio, peso=0)
 
         genes = []
+
+        # enquanto ainda houver cidade não visitada
+        # e o tamanho do cromossomo não atingiu o limite
         while (
             aresta.no_destino not in visitados
             and len(genes) < self.tamanho_cromossos
         ):
+            # cria novo gene
             genes.append(Gene(alelo=aresta))
-            visitados.append(aresta.no_destino)
 
-            vizinhos = aresta.no_destino.arestas
+            # maraca a cidade como visitada
+            cidade = aresta.no_destino
+            visitados.append(cidade)
 
+            # pega as arestas vizinhas da cidade visitada
+            vizinhos = cidade.arestas
+
+            # cria um role de probabilidade igual de sorteio
+            # para qualquer uma das arestas vizinhas
             roleta = criar_roleta_equilibrada(vizinhos)
 
+            # for auxiliar para selecionar sempre uma cidade não visitada
+            # e caso a cidade esteja visitada, continuar selecionando outras
+            # até encontrar uma não visitada, ou terminar o loop se todas
+            # estiverem visitadas
             for possivel_elemento in roleta.selecionar(len(vizinhos)):
                 aresta = possivel_elemento
 
                 if aresta.no_destino not in visitados:
                     break
 
+        # completar as posições restantes dos genes com genes `Empty`
         while len(genes) < self.tamanho_cromossos:
             genes.append(Gene(alelo=Empty()))
 
